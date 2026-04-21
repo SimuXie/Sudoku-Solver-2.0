@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "E:/**"
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/external/raylib/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -13,7 +14,8 @@
             ],
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPath": "E:\\msys2\\mingw64\\bin\\gcc.exe"
         }
     ],
     "version": 4

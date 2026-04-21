@@ -1,12 +1,13 @@
 CC = gcc
-CFLAGS = -Iexternal/raylib/include
+CFLAGS = -Iexternal/raylib/include -Iinclude
 LDFLAGS = -Lexternal/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm
+ASAN = -fsanitize=address -g -O1
 
-SRC = src/main.c
+SRC = src/main.c src/draw.c
 OUT = main.exe
 
 all:
 	$(CC) $(SRC) -o $(OUT) $(CFLAGS) $(LDFLAGS)
 
 clean:
-	del $(OUT)
+	rm $(OUT)

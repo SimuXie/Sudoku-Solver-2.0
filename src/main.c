@@ -1,12 +1,16 @@
 #include "raylib.h"
 
+#include "draw.h"
+
+#include <stdio.h>
+
 int main(void) {
     InitWindow(800, 600, "raylib test");
 
     while (!WindowShouldClose()) {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
-        DrawText("It works!", 350, 280, 20, BLACK);
+        ClearBackground(RAYWHITE);        
+        DrawFrame();
         EndDrawing();
     }
 
