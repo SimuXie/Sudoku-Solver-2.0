@@ -1,0 +1,12 @@
+CC = gcc
+CFLAGS = -Iexternal/raylib/include
+LDFLAGS = -Lexternal/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm
+
+SRC = src/main.c
+OUT = main.exe
+
+all:
+	$(CC) $(SRC) -o $(OUT) $(CFLAGS) $(LDFLAGS)
+
+clean:
+	del $(OUT)
