@@ -1,5 +1,5 @@
 #ifndef DRAW_H
-#define DRAW
+#define DRAW_H
 
 // does a thing
 void DrawFrame(void);
