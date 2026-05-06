@@ -9,7 +9,7 @@ int main(void) {
 
     Sudoku s = SudokuNew();
     int seed[81] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 2, 3, 4, 5, 6, 7, 8, 9,
         0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -24,15 +24,15 @@ int main(void) {
     SudokuPrintBoard(s);
 
 
-    // InitWindow(800, 600, "raylib test");
+    InitWindow(800, 600, "raylib test");
 
-    // while (!WindowShouldClose()) {
-    //     BeginDrawing();
-    //     ClearBackground(RAYWHITE);        
-    //     DrawFrame();
-    //     EndDrawing();
-    // }
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);        
+        DrawFrame(s);
+        EndDrawing();
+    }
 
-    // CloseWindow();
+    CloseWindow();
     return 0;
 }
