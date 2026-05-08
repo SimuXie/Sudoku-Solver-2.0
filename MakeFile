@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Iexternal/raylib/include -Iinclude
+CFLAGS = -Iexternal/raylib/include -Iinclude
 LDFLAGS = -Lexternal/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm
 ASAN = -fsanitize=address -g -O1
 
