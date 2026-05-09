@@ -1,66 +1,63 @@
 #ifndef SUDOKU_H
 #define SUDOKU_H
 
+#include <stdbool.h>
+
+#include "raylib.h"
 #include "constants.h"
 
 typedef struct sudoku *Sudoku;
 
-/*
--Interface-
-*/
+/* new and free */
+
 Sudoku SudokuNew(void);
+void SudokuFree(Sudoku s);
 
-void SudokuFreeBoard(Sudoku s);
+/* board loading */
 
-bool SudokuIsFilled(Sudoku s);
+void SudokuInputBoard(Sudoku s, const int seed[SUDOKU_SIZE]);
 
-bool SudokuIsIllegal(Sudoku s);
+void SudokuFixInitialCells(Sudoku s);
 
-void SudokuFixSolutions(Sudoku s);
+/* answers */
 
-bool SudokuIsCellFixed(Sudoku s, int row, int col);
+void SudokuSetAnswer(Sudoku s, int row, int col, int value);
 
-/*
--Writing-
-Functions to write to the Sudoku
-*/
+int SudokuGetAnswer(const Sudoku s, int row, int col);
 
-void SudokuAnswer(Sudoku s, int ans);
+void SudokuClearAnswer(Sudoku s, int row, int col);
 
-void SudokuSetAnswer(Sudoku s, int row, int col, int a);
+/* fixed cells */
 
-void SudokuFastPencil(Sudoku s);
+bool SudokuIsCellFixed(const Sudoku s, int row, int col);
 
-/*
--Targetting-
-Targets a cell to perform operations like answering, pencilling, or erasing.
-*/
-// Returns the target. Assumes there is one.
-Vector2 SudokuGetTarget(Sudoku s);
+/* pencil marks */
 
-// Returns true if there is a currently valid target.
-bool SudokuHasTarget(Sudoku s);
+void SudokuAddPencil(Sudoku s, int value);
 
-// Removes current target.
-void SudokuUntarget(Sudoku s);
+void SudokuRemovePencil(Sudoku s, int value);
 
-// Targets input cell.
-void SudokuTarget(Sudoku s, int row, int col);
+void SudokuClearPencils(Sudoku s, int row, int col);
 
-/*
--Answering-
-Returns values for cells and answers.
-*/
-// Returns the answer at a certain cell.
-int SudokuGetCellAnswer(Sudoku s, int row, int col);
+int SudokuGetPencils(const Sudoku s, bool out[NUMBERS], int row, int col);
 
-// Saves the pencils of a board into the input array.
-int SudokuGetCellPencils(Sudoku s, bool pencil[NUMBERS], int row, int col);
+/* validation */
 
-// DEBUGGERS
+bool SudokuIsFilled(const Sudoku s);
+bool SudokuIsIllegal(const Sudoku s);
 
-void SudokuInputBoard(Sudoku s, int seed[SUDOKU_SIZE]);
+/* targeting */
 
-void SudokuPrintBoard(Sudoku s);
+void SudokuSetTarget(Sudoku s, int row, int col);
+
+void SudokuClearTarget(Sudoku s);
+
+bool SudokuHasTarget(const Sudoku s);
+
+Vector2 SudokuGetTarget(const Sudoku s);
+
+/* debugging */
+
+void SudokuPrintBoard(const Sudoku s);
 
 #endif

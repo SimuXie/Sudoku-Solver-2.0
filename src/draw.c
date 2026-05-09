@@ -75,7 +75,7 @@ static void drawHighlight(Sudoku s) {
 
     if (rowChute == INVALID || colChute == INVALID) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            SudokuUntarget(s);
+            SudokuClearTarget(s);
         }
         return;
     }
@@ -84,14 +84,14 @@ static void drawHighlight(Sudoku s) {
     DrawRectangleV(Vector2Add(gridStart, highlightOffset), (Vector2){BLOCK_SIZE, BLOCK_SIZE}, Fade(HIGHLIGHT_COLOUR, HIGHLIGHT_ALPHA));
     
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        SudokuTarget(s, colChute, rowChute);
+        SudokuSetTarget(s, colChute, rowChute);
     }
 }
 
 static void drawAnswers(Sudoku s) {
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
-            int ans = SudokuGetCellAnswer(s, i, j);
+            int ans = SudokuGetAnswer(s, i, j);
 
             if (ans == 0) {
                 continue;
@@ -111,13 +111,13 @@ static void drawAnswers(Sudoku s) {
 static void drawPencils(Sudoku s) {
     for (int i = 0; i < NUM_ROWS; i++) {
         for (int j = 0; j < NUM_COLS; j++) {
-            if (SudokuGetCellAnswer(s, i, j) != 0) {
+            if (SudokuGetAnswer(s, i, j) != 0) {
                 continue;
             }
 
             Vector2 pos = getCellPosition(i, j);
             bool pencils[NUMBERS];
-            SudokuGetCellPencils(s, pencils, i, j);
+            SudokuGetPencils(s, pencils, i, j);
             drawPencilInBox(pencils, pos);
         }
     }

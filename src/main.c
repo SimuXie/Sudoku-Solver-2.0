@@ -13,7 +13,9 @@ static void input(Sudoku s);
 int main(void) {
 
     Sudoku s = SudokuNew();
+
     int seed[81] = {
+
         3,0,0, 0,0,0, 4,0,0,
         0,0,0, 6,0,0, 0,5,0,
         0,1,0, 0,0,0, 0,0,0,
@@ -28,106 +30,98 @@ int main(void) {
     };
 
     SudokuInputBoard(s, seed);
-    
-    SudokuFixSolutions(s);
-    
+
+    SudokuFixInitialCells(s);
+
     SudokuPrintBoard(s);
-    
-    int count = 0;
 
-    clock_t start = clock();
-    Solver(s, &count);
-    clock_t end = clock();
+    InitWindow(1200, 800, "raylib sudoku");
 
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    while (!WindowShouldClose()) {
 
-    printf("Time: %.6f seconds\n", seconds);
+        setCursor();
+
+        if (IsKeyPressed(KEY_ENTER)) {
+
+            int count = 0;
+
+            Solver(s, &count);
+
+            printf("Done!\n");
+            printf("Solutions: %d\n", count);
+        }
+
+        input(s);
+
+        BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+        DrawFrame(s);
+
+        EndDrawing();
+    }
+
+    SudokuFree(s);
+
+    CloseWindow();
+
+    return 0;
 }
 
-// int main(void) {
-
-//     Sudoku s = SudokuNew();
-//     int seed[81] = {
-//     3,0,0, 0,0,0, 4,0,0,
-//     0,0,0, 6,0,0, 0,5,0,
-//     0,1,0, 0,0,0, 0,0,0,
-
-//     5,0,6, 0,0,0, 0,7,0,
-//     8,0,7, 0,0,0, 0,0,0,
-//     0,0,0, 0,9,0, 0,0,0,
-
-//     0,0,0, 5,0,8, 0,0,0,
-//     0,0,0, 7,0,0, 2,0,0,
-//     0,4,0, 0,0,0, 9,0,0
-// };
-
-//     // bool pencil[9] = {1};
-
-//     SudokuInputBoard(s, seed);
-    
-//     SudokuFixSolutions(s);
-    
-//     SudokuPrintBoard(s);
-
-//     InitWindow(1200, 800, "raylib test");
-
-//     while (!WindowShouldClose()) {
-//         setCursor();
-
-//         if (IsKeyPressed(KEY_ENTER)) {
-//             int count = 0;
-//             Solver(s, &count);
-//             printf("Done!\n");
-//             printf("Solutions: %d\n", count);
-//         }
-
-//         BeginDrawing();
-//         ClearBackground(RAYWHITE);        
-//         DrawFrame(s);
-//         input(s);
-//         EndDrawing();
-//     }
-
-//     CloseWindow();
-//     return 0;
-// }
-
 static void input(Sudoku s) {
+
     if (!SudokuHasTarget(s)) {
         return;
     }
 
-    int input = GetKeyPressed();
-    switch (input) {
+    Vector2 target = SudokuGetTarget(s);
+
+    int row = (int)target.y;
+    int col = (int)target.x;
+
+    int key = GetKeyPressed();
+
+    switch (key) {
+
         case KEY_ONE:
-            SudokuAnswer(s, 1);
+            SudokuSetAnswer(s, row, col, 1);
             break;
+
         case KEY_TWO:
-            SudokuAnswer(s, 2);
+            SudokuSetAnswer(s, row, col, 2);
             break;
+
         case KEY_THREE:
-            SudokuAnswer(s, 3);
+            SudokuSetAnswer(s, row, col, 3);
             break;
+
         case KEY_FOUR:
-            SudokuAnswer(s, 4);
+            SudokuSetAnswer(s, row, col, 4);
             break;
+
         case KEY_FIVE:
-            SudokuAnswer(s, 5);
+            SudokuSetAnswer(s, row, col, 5);
             break;
+
         case KEY_SIX:
-            SudokuAnswer(s, 6);
+            SudokuSetAnswer(s, row, col, 6);
             break;
+
         case KEY_SEVEN:
-            SudokuAnswer(s, 7);
+            SudokuSetAnswer(s, row, col, 7);
             break;
+
         case KEY_EIGHT:
-            SudokuAnswer(s, 8);
+            SudokuSetAnswer(s, row, col, 8);
             break;
+
         case KEY_NINE:
-            SudokuAnswer(s,9);
+            SudokuSetAnswer(s, row, col, 9);
             break;
+
         case KEY_BACKSPACE:
-            SudokuAnswer(s, 0);
+            SudokuClearAnswer(s, row, col);
             break;
     }
 }
