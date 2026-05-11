@@ -61,7 +61,7 @@ int main(void) {
 
     SudokuInputBoard(s, seed);
 
-    SudokuFixInitialCells(s);
+    // SudokuFixInitialCells(s);
 
     SudokuPrintBoard(s);
 

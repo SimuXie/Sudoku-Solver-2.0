@@ -34,13 +34,13 @@ void DrawFrame(Sudoku s, int count) {
 static void drawDebug(Sudoku s, const int count) {
     int n = 10;
 
-    // DrawText(TextFormat("SOLVER ACTIVE, SOLUTIONS: %d", count), 10, n, 20, BLACK);
-    // n += 20;
-
-    if (SudokuIsIllegal(s)) {
-        DrawText("Illegal", 10, n, 20, BLACK);
-    }
+    DrawText("Press ENTER to initiate solver", 10, n, 20, BLACK);
     n += 20;
+
+    // if (SudokuIsIllegal(s)) {
+    //     DrawText("Illegal", 10, n, 20, BLACK);
+    // }
+    // n += 20;
 }
 
 static void drawTarget(Sudoku s) {
