@@ -8,10 +8,11 @@
 
 typedef struct sudoku *Sudoku;
 
-/* new and free */
+/* coding interface */
 
 Sudoku SudokuNew(void);
 void SudokuFree(Sudoku s);
+Sudoku SudokuDup(Sudoku s);
 
 /* board loading */
 

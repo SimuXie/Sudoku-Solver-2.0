@@ -9,7 +9,7 @@
 
 static void drawGrid(void);
 
-static void drawDebug(Sudoku s);
+static void drawDebug(Sudoku s, int count);
 
 static void drawAnswers(Sudoku s);
 static void drawPencils(Sudoku s);
@@ -19,8 +19,8 @@ static void drawPencilInBox(bool *pencils, Vector2 pos);
 static void drawHighlight(Sudoku s);
 static void drawTarget(Sudoku s);
 
-void DrawFrame(Sudoku s) {
-    drawDebug(s);
+void DrawFrame(Sudoku s, int count) {
+    drawDebug(s, count);
 
     drawGrid();
 
@@ -31,8 +31,12 @@ void DrawFrame(Sudoku s) {
     drawPencils(s);
 }
 
-static void drawDebug(Sudoku s) {
+static void drawDebug(Sudoku s, const int count) {
     int n = 10;
+
+    // DrawText(TextFormat("SOLVER ACTIVE, SOLUTIONS: %d", count), 10, n, 20, BLACK);
+    // n += 20;
+
     if (SudokuIsIllegal(s)) {
         DrawText("Illegal", 10, n, 20, BLACK);
     }

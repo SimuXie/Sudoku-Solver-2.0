@@ -3,6 +3,6 @@
 
 #include "sudoku.h"
 // does a thing
-void DrawFrame(Sudoku s);
+void DrawFrame(Sudoku s, int count);
 
 #endif

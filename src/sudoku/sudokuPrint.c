@@ -1,3 +1,5 @@
+// Debug to print a sudoku board
+
 #include <stdio.h>
 
 #include "sudoku.h"

@@ -42,6 +42,10 @@ void *StackPop(Stack s) {
     return s->items[s->top--];
 }
 
+void *StackPeek(Stack s) {
+    return s->items[s->top];
+}
+
 void StackPush(Stack s, void *item) {
     if (s->top == s->capacity - 1) {
         s = stackExpand(s);

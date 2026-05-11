@@ -22,8 +22,6 @@ struct sudoku {
 
 bool SudokuTargetIsValid(const Sudoku s);
 
-bool SudokuPositionIsValid(int row, int col);
-
 int SudokuBoxIndex(int row, int col);
 
 /* cell helpers */

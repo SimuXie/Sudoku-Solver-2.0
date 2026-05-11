@@ -15,6 +15,8 @@ bool StackIsEmpty(Stack s);
 
 void *StackPop(Stack s);
 
+void *StackPeek(Stack s);
+
 void StackPush(Stack s, void *item);
 
 #endif

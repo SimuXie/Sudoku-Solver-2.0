@@ -2,7 +2,7 @@
 
 #include "draw.h"
 #include "sudoku.h"
-#include "generator.h"
+#include "solvers.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -14,8 +14,23 @@ int main(void) {
 
     Sudoku s = SudokuNew();
 
-    int seed[81] = {
+    // // EMPTY
+    // int seed[81] = {
+    //     0,0,0, 0,0,0, 0,0,0,
+    //     0,0,0, 0,0,0, 0,0,0,
+    //     0,0,0, 0,0,0, 0,0,0,
 
+    //     0,0,0, 0,0,0, 0,0,0,
+    //     0,0,0, 0,0,0, 0,0,0,
+    //     0,0,0, 0,0,0, 0,0,0,
+
+    //     0,0,0, 0,0,0, 0,0,0,
+    //     0,0,0, 0,0,0, 0,0,0,
+    //     0,0,0, 0,0,0, 0,0,0
+    // };
+
+    // HARD
+    int seed[81] = {
         3,0,0, 0,0,0, 4,0,0,
         0,0,0, 6,0,0, 0,5,0,
         0,1,0, 0,0,0, 0,0,0,
@@ -29,6 +44,21 @@ int main(void) {
         0,4,0, 0,0,0, 9,0,0
     };
 
+    // // EASY
+    // int seed[81] = {
+    //     9,2,8, 4,1,0, 0,0,0,
+    //     1,0,6, 7,0,0, 0,0,0,
+    //     0,5,7, 2,6,8, 0,0,9,
+
+    //     0,7,5, 3,8,0, 0,0,0,
+    //     0,9,1, 6,0,7, 0,0,4,
+    //     4,0,2, 9,0,1, 8,6,7,
+
+    //     5,8,9, 0,7,2, 3,4,0,
+    //     0,6,4, 8,9,0, 0,5,2,
+    //     2,1,0, 5,4,6, 7,0,8
+    // };
+
     SudokuInputBoard(s, seed);
 
     SudokuFixInitialCells(s);
@@ -40,13 +70,9 @@ int main(void) {
     while (!WindowShouldClose()) {
 
         setCursor();
-
+        int count = 0;
         if (IsKeyPressed(KEY_ENTER)) {
-
-            int count = 0;
-
-            Solver(s, &count);
-
+            RecursiveSolver(s, &count, false);
             printf("Done!\n");
             printf("Solutions: %d\n", count);
         }
@@ -54,11 +80,8 @@ int main(void) {
         input(s);
 
         BeginDrawing();
-
         ClearBackground(RAYWHITE);
-
-        DrawFrame(s);
-
+        DrawFrame(s, count);
         EndDrawing();
     }
 

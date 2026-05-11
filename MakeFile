@@ -3,7 +3,7 @@ CFLAGS = -Iexternal/raylib/include -Iinclude
 LDFLAGS = -Lexternal/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm
 ASAN = -fsanitize=address -g -O1
 
-SRC := $(wildcard src/*.c) $(wildcard src/sudoku/*.c) 
+SRC := $(wildcard src/*.c) $(wildcard src/sudoku/*.c) $(wildcard src/solvers/*.c) $(wildcard src/misc/*.c)
 OUT = main.exe
 
 all:
