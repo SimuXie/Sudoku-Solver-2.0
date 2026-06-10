@@ -55,14 +55,14 @@ void StackPush(Stack s, void *item) {
 
 static Stack stackExpand(Stack s) {
     int newCap = s->capacity * 2;
-    s->items = myRealloc(s->items, newCap);
+    s->items = myRealloc(s->items, sizeof(void*) * newCap);
     s->capacity = newCap;
 
     return s;
 }
 
 // Malloc wrapper that runs a memory error check.
-// Returns a void pointer. Same useage as malloc().
+// Returns a void pointer. Same useage as malloc(). 
 static void *myMalloc(size_t size) {
 	void *ptr = malloc(size); 
 	errorCheck(ptr);

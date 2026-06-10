@@ -11,49 +11,105 @@
 
 #include "raylib.h"
 
-void RecursiveSolver(Sudoku s, int *count, const bool shouldCount) {
-    static double lastDrawTime = 0.0;
-    const double targetFrameTime = 1.0 / 30.0;   // 30 FPS
+struct recursiveSolver {
+    Sudoku sudoku;
 
-    if (*count == 1 && !shouldCount) {
+    int solutions;
+    bool active;
+    bool shouldCount;
+    bool complete;
+};
+
+void RecursiveSolve(RecursiveSolver s) {
+    static double lastDrawTime = 0.0;
+    const double targetFrameTime = 1.0 / 30.0;
+
+    if (s->complete) {
         return;
     }
 
-    struct cell c = getNextCell(s);
+    struct cell c = getNextCell(s->sudoku);
 
     if (c.x == -1) {
-        *count += 1;
-        printf("Solution found so far: %d\n", *count);
-        SudokuPrintBoard(s);
+
+        s->solutions++;
+
+        SudokuPrintBoard(s->sudoku);
+
+        if (!s->shouldCount) {
+            s->complete = true;
+            s->active = false;
+        }
+
         return;
     }
 
     for (int i = 1; i <= NUMBERS; i++) {
-        SudokuSetTarget(s, c.x, c.y);
-        SudokuSetAnswer(s, c.x, c.y, i);
+
+        SudokuSetTarget(s->sudoku, c.x, c.y);
+        SudokuSetAnswer(s->sudoku, c.x, c.y, i);
 
         double now = GetTime();
+
         if (now - lastDrawTime >= targetFrameTime) {
+
             if (WindowShouldClose()) {
                 fprintf(stderr, "Exit prompted\n");
                 exit(EXIT_FAILURE);
             }
+
             BeginDrawing();
+
             ClearBackground(RAYWHITE);
-            DrawFrame(s, *count);
+
+            DrawFrame(s->sudoku, s->solutions);
+
             EndDrawing();
 
             lastDrawTime = now;
         }
 
-        if (!SudokuIsIllegal(s)) {
-            RecursiveSolver(s, count, shouldCount);
+        if (!SudokuIsIllegal(s->sudoku)) {
+            RecursiveSolve(s);
         }
 
-        if (*count == 1 && !shouldCount) {
+        SudokuSetAnswer(s->sudoku, c.x, c.y, 0);
+
+        if (s->complete) {
             return;
         }
-
-        SudokuSetAnswer(s, c.x, c.y, 0);
     }
+}
+
+RecursiveSolver RecursiveSolverNew(Sudoku s, bool shouldCount) {
+    RecursiveSolver solver = myMalloc(sizeof(*solver));
+
+    solver->sudoku = s;
+
+    solver->solutions = 0;
+    solver->shouldCount = shouldCount;
+    solver->active = false;
+    solver->complete = false;
+
+    return solver;
+}
+
+void RecursiveSolverFree(RecursiveSolver s) {
+    free(s);
+}
+
+void RecursiveSolverInitiate(RecursiveSolver s) {
+    s->active = true;
+}
+
+bool RecursiveSolverIsActive(RecursiveSolver s) {
+    return s->active;
+}
+
+bool RecursiveSolverIsComplete(RecursiveSolver s) {
+    return s->complete;
+}
+
+int RecursiveSolverSolutions(RecursiveSolver s) {
+    return s->solutions;
 }

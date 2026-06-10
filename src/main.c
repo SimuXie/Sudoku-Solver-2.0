@@ -10,7 +10,11 @@
 static void setCursor(void);
 static void input(Sudoku s);
 
+#define RENDER_TIME (0)
+
 int main(void) {
+
+    SetTargetFPS(0);
 
     Sudoku s = SudokuNew();
 
@@ -67,28 +71,33 @@ int main(void) {
 
     InitWindow(1200, 800, "raylib sudoku");
 
-    while (!WindowShouldClose()) {
+    Solver solver = SolverNew(s, false, STEP);
+    double lastRender = 0;
+    double lastTime = 0;
 
+    while (!WindowShouldClose()) {
         setCursor();
-        int count = 0;
         if (IsKeyPressed(KEY_ENTER)) {
-            RecursiveSolver(s, &count, false);
-            printf("Done!\n");
-            printf("Solutions: %d\n", count);
+            SolverInitiate(solver);
+        }
+
+        if (SolverIsActive(solver)) {
+            lastTime = GetTime();
+            Solve(solver);
         }
 
         input(s);
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        DrawFrame(s, count);
-        EndDrawing();
+        if (GetTime() - lastRender > RENDER_TIME) {
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            DrawFrame(s, 0);
+            EndDrawing();
+            lastRender = GetTime();
+        }
     }
-
+    SolverFree(solver);
     SudokuFree(s);
-
     CloseWindow();
-
     return 0;
 }
 
