@@ -10,11 +10,11 @@
 static void setCursor(void);
 static void input(Sudoku s);
 
-#define RENDER_TIME (0)
+#define SIMULATION_TIME 1.0/1000000.0
 
 int main(void) {
 
-    SetTargetFPS(0);
+    SetTargetFPS(60);
 
     Sudoku s = SudokuNew();
 
@@ -34,34 +34,34 @@ int main(void) {
     // };
 
     // HARD
-    int seed[81] = {
-        3,0,0, 0,0,0, 4,0,0,
-        0,0,0, 6,0,0, 0,5,0,
-        0,1,0, 0,0,0, 0,0,0,
+    // int seed[81] = {
+    //     3,0,0, 0,0,0, 4,0,0,
+    //     0,0,0, 6,0,0, 0,5,0,
+    //     0,1,0, 0,0,0, 0,0,0,
 
-        5,0,6, 0,0,0, 0,7,0,
-        8,0,7, 0,0,0, 0,0,0,
-        0,0,0, 0,9,0, 0,0,0,
+    //     5,0,6, 0,0,0, 0,7,0,
+    //     8,0,7, 0,0,0, 0,0,0,
+    //     0,0,0, 0,9,0, 0,0,0,
 
-        0,0,0, 5,0,8, 0,0,0,
-        0,0,0, 7,0,0, 2,0,0,
-        0,4,0, 0,0,0, 9,0,0
-    };
+    //     0,0,0, 5,0,8, 0,0,0,
+    //     0,0,0, 7,0,0, 2,0,0,
+    //     0,4,0, 0,0,0, 9,0,0
+    // };
 
     // // EASY
-    // int seed[81] = {
-    //     9,2,8, 4,1,0, 0,0,0,
-    //     1,0,6, 7,0,0, 0,0,0,
-    //     0,5,7, 2,6,8, 0,0,9,
+    int seed[81] = {
+        9,2,8, 4,1,0, 0,0,0,
+        1,0,6, 7,0,0, 0,0,0,
+        0,5,7, 2,6,8, 0,0,9,
 
-    //     0,7,5, 3,8,0, 0,0,0,
-    //     0,9,1, 6,0,7, 0,0,4,
-    //     4,0,2, 9,0,1, 8,6,7,
+        0,7,5, 3,8,0, 0,0,0,
+        0,9,1, 6,0,7, 0,0,4,
+        4,0,2, 9,0,1, 8,6,7,
 
-    //     5,8,9, 0,7,2, 3,4,0,
-    //     0,6,4, 8,9,0, 0,5,2,
-    //     2,1,0, 5,4,6, 7,0,8
-    // };
+        5,8,9, 0,7,2, 3,4,0,
+        0,6,4, 8,9,0, 0,5,2,
+        2,1,0, 5,4,6, 7,0,8
+    };
 
     SudokuInputBoard(s, seed);
 
@@ -72,29 +72,57 @@ int main(void) {
     InitWindow(1200, 800, "raylib sudoku");
 
     Solver solver = SolverNew(s, false, STEP);
-    double lastRender = 0;
-    double lastTime = 0;
+
+    double accumulator = 0.0;
+    double lastTime = GetTime();
+
+    int renders = 0;
+    int loops = 0;
 
     while (!WindowShouldClose()) {
+        // TIME
+        double current = GetTime();
+        accumulator += (current - lastTime);
+        lastTime = current;
+
+
+
+        // INPUT
         setCursor();
+
         if (IsKeyPressed(KEY_ENTER)) {
             SolverInitiate(solver);
         }
 
-        if (SolverIsActive(solver)) {
-            lastTime = GetTime();
-            Solve(solver);
+        input(s);
+
+        // --- SIMULATION (fixed timestep) ---
+        while (accumulator >= SIMULATION_TIME)
+        {
+            if (SolverIsActive(solver)) {
+                Solve(solver);
+                loops++;
+            }
+
+            accumulator -= SIMULATION_TIME;
         }
 
-        input(s);
-        if (GetTime() - lastRender > RENDER_TIME) {
-            BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawFrame(s, 0);
-            EndDrawing();
-            lastRender = GetTime();
+        // --- RENDER ---
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        DrawFPS(10, 100);
+        DrawFrame(s, 0);
+
+        if (SolverIsActive(solver)) {
+            renders++;
         }
+
+        EndDrawing();
     }
+
+    printf("Loops: %d\nRenders: %d\n", loops, renders);
+
     SolverFree(solver);
     SudokuFree(s);
     CloseWindow();
