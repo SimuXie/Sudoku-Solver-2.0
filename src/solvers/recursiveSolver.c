@@ -22,7 +22,7 @@ struct recursiveSolver {
 
 void RecursiveSolve(RecursiveSolver s) {
     static double lastDrawTime = 0.0;
-    const double targetFrameTime = 1.0 / 30.0;
+    const double targetFrameTime = 1.0 / 12.0;
 
     if (s->complete) {
         return;
@@ -73,11 +73,11 @@ void RecursiveSolve(RecursiveSolver s) {
             RecursiveSolve(s);
         }
 
-        SudokuSetAnswer(s->sudoku, c.x, c.y, 0);
-
         if (s->complete) {
             return;
         }
+
+        SudokuSetAnswer(s->sudoku, c.x, c.y, 0);
     }
 }
 
